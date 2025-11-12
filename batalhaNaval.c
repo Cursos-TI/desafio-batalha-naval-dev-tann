@@ -82,6 +82,75 @@ int main() {
         }
     }
 
+    /* ----- Navios diagonais ----- */
+    int navio3_row_start = 2; 
+    int navio3_col_start = 0; 
+    int navio3_tamanho = 3;
+    int pode_posicionar3 = 1;
+
+    /* Verifica limites para navio diagonal direita */
+    if (navio3_row_start < 0 || navio3_row_start + navio3_tamanho > 10 ||
+        navio3_col_start < 0 || navio3_col_start + navio3_tamanho > 10) {
+        pode_posicionar3 = 0;
+        printf("### ERRO: Navio 3 (Diagonal direita) está fora dos limites. ###\n\n");
+    }
+
+    /* Verifica sobreposição */
+    if (pode_posicionar3 == 1) {
+        for (int k = 0; k < navio3_tamanho; k++) {
+            int r = navio3_row_start + k;
+            int c = navio3_col_start + k;
+            if (tabuleiro[r][c] != 0) {
+                pode_posicionar3 = 0;
+                printf("### ERRO: Navio 3 sobrepõe outro navio. ###\n\n");
+                break;
+            }
+        }
+    }
+
+    /* Posiciona navio 3 */
+    if (pode_posicionar3 == 1) {
+        for (int k = 0; k < navio3_tamanho; k++) {
+            int r = navio3_row_start + k;
+            int c = navio3_col_start + k;
+            tabuleiro[r][c] = 3;
+        }
+    }
+
+    int navio4_row_start = 2; 
+    int navio4_col_start = 8; 
+    int navio4_tamanho = 3;
+    int pode_posicionar4 = 1;
+
+    /* Verifica limites para navio diagonal esquerda */
+    if (navio4_row_start < 0 || navio4_row_start + navio4_tamanho > 10 ||
+        navio4_col_start < 0 || navio4_col_start - (navio4_tamanho - 1) < 0) {
+        pode_posicionar4 = 0;
+        printf("### ERRO: Navio 4 (Diagonal esquerda) está fora dos limites. ###\n\n");
+    }
+
+    /* Verifica sobreposição para navio 4 */
+    if (pode_posicionar4 == 1) {
+        for (int k = 0; k < navio4_tamanho; k++) {
+            int r = navio4_row_start + k;
+            int c = navio4_col_start - k;
+            if (tabuleiro[r][c] != 0) {
+                pode_posicionar4 = 0;
+                printf("### ERRO: Navio 4 sobrepõe outro navio. ###\n\n");
+                break;
+            }
+        }
+    }
+
+    /* Posiciona navio 4 */
+    if (pode_posicionar4 == 1) {
+        for (int k = 0; k < navio4_tamanho; k++) {
+            int r = navio4_row_start + k;
+            int c = navio4_col_start - k;
+            tabuleiro[r][c] = 3;
+        }
+    }
+
     printf("### TABULEIRO BATALHA NAVAL ###\n");
 
     /* Imprime cabeçalho com as letras das colunas */

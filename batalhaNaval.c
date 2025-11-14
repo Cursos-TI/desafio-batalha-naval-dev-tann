@@ -1,9 +1,5 @@
 #include <stdio.h>
 
-// Desafio Batalha Naval - MateCheck
-// Este código inicial serve como base para o desenvolvimento do sistema de Batalha Naval.
-// Siga os comentários para implementar cada parte do desafio.
-
 int main() {
 
     char linhaLetras[10] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'};
@@ -151,6 +147,105 @@ int main() {
         }
     }
 
+    /* ----- Matrizes de habilidade (5x5) ----- */
+    /* Todas são construídas dinamicamente usando loops aninhados e condicionais. */
+    const int SKILL_SIZE = 5;
+    int cone[SKILL_SIZE][SKILL_SIZE];
+    int cruz[SKILL_SIZE][SKILL_SIZE];
+    int octaedro[SKILL_SIZE][SKILL_SIZE];
+
+    for (int r = 0; r < SKILL_SIZE; r++) {
+        for (int c = 0; c < SKILL_SIZE; c++) {
+            cone[r][c] = 0;
+            cruz[r][c] = 0;
+            octaedro[r][c] = 0;
+        }
+    }
+
+    int center = SKILL_SIZE / 2; 
+
+    for (int r = 0; r < SKILL_SIZE; r++) {
+        int radius = r; /* quanto mais baixo, mais largo */
+        int cmin = center - radius;
+        int cmax = center + radius;
+        if (cmin < 0) cmin = 0;
+        if (cmax >= SKILL_SIZE) cmax = SKILL_SIZE - 1;
+        for (int c = cmin; c <= cmax; c++) {
+            cone[r][c] = 1;
+        }
+    }
+
+    /* Construir Cruz (origem no centro): linha central e coluna central marcadas */
+    for (int i = 0; i < SKILL_SIZE; i++) {
+        cruz[center][i] = 1;
+        cruz[i][center] = 1; 
+
+    /* Construir Octaedro (vista frontal = losango). Usamos a condição |dr|+|dc| <= 1
+       para formar o pequeno losango. */
+    for (int r = 0; r < SKILL_SIZE; r++) {
+        for (int c = 0; c < SKILL_SIZE; c++) {
+            int dr = (r - center) >= 0 ? (r - center) : (center - r);
+            int dc = (c - center) >= 0 ? (c - center) : (center - c);
+            if (dr + dc <= 1) {
+                octaedro[r][c] = 1;
+            }
+        }
+    }
+
+    /* ----- Pontos de origem no tabuleiro (definidos aqui diretamente) ----- */
+    
+    int cone_origin_row = 0 + 0; 
+    int cone_origin_col = 5;     
+
+    
+    int cruz_origin_row = 6; 
+    int cruz_origin_col = 2; 
+
+    int oct_origin_row = 3; 
+    int oct_origin_col = 6; 
+
+    /* Sobrepor Cone */
+    for (int sr = 0; sr < SKILL_SIZE; sr++) {
+        for (int sc = 0; sc < SKILL_SIZE; sc++) {
+            if (cone[sr][sc] == 1) {
+                int board_r = cone_origin_row + (sr - 0); 
+                int board_c = cone_origin_col + (sc - center);
+                if (board_r >= 0 && board_r < 10 && board_c >= 0 && board_c < 10) {
+                    if (tabuleiro[board_r][board_c] == 0) tabuleiro[board_r][board_c] = 5;
+                    else if (tabuleiro[board_r][board_c] == 3) tabuleiro[board_r][board_c] = 8;
+                }
+            }
+        }
+    }
+
+    /* Sobrepor Cruz */
+    for (int sr = 0; sr < SKILL_SIZE; sr++) {
+        for (int sc = 0; sc < SKILL_SIZE; sc++) {
+            if (cruz[sr][sc] == 1) {
+                int board_r = cruz_origin_row + (sr - center);
+                int board_c = cruz_origin_col + (sc - center);
+                if (board_r >= 0 && board_r < 10 && board_c >= 0 && board_c < 10) {
+                    if (tabuleiro[board_r][board_c] == 0) tabuleiro[board_r][board_c] = 5;
+                    else if (tabuleiro[board_r][board_c] == 3) tabuleiro[board_r][board_c] = 8;
+                }
+            }
+        }
+    }
+
+    /* Sobrepor Octaedro */
+    for (int sr = 0; sr < SKILL_SIZE; sr++) {
+        for (int sc = 0; sc < SKILL_SIZE; sc++) {
+            if (octaedro[sr][sc] == 1) {
+                int board_r = oct_origin_row + (sr - center);
+                int board_c = oct_origin_col + (sc - center);
+                if (board_r >= 0 && board_r < 10 && board_c >= 0 && board_c < 10) {
+                    if (tabuleiro[board_r][board_c] == 0) tabuleiro[board_r][board_c] = 5;
+                    else if (tabuleiro[board_r][board_c] == 3) tabuleiro[board_r][board_c] = 8;
+                }
+            }
+        }
+    }
+
     printf("### TABULEIRO BATALHA NAVAL ###\n");
 
     /* Imprime cabeçalho com as letras das colunas */
@@ -171,7 +266,6 @@ int main() {
         }
         printf("\n");
     }
-
 
 
 
